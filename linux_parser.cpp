@@ -70,19 +70,19 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { 
   float memTotal=0, memFree=0;
-  string line,key,val;
+  string line,key;
   std::ifstream stream(kProcDirectory+kMeminfoFilename);
   if(stream.is_open()){
     while(std::getline(stream,line)){
       std::replace(line.begin(), line.end(), ':', ' ');
       std::remove(line.begin(), line.end(), ' ');
       std::istringstream linestream(line);
-      while(linestream>>key>>val){
+      while(linestream>>key){
         if(key== "MemTotal"){
-          memTotal=std::stol(val);
+          linestream>>memTotal;
         }
         if(key=="MemFree"){
-          memFree=std::stol(val);
+          linestream>>memFree;
           break;
         }
       }
@@ -101,14 +101,14 @@ long LinuxParser::UpTime() {
     std::getline(stream, line);
     std::istringstream linestream(line);
     linestream>>value;
-    time=std::stol(value);
+    time=stol(value);
   }
   return time; 
 }
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { 
-  return ActiveJiffies()-IdleJiffies(); 
+  return ActiveJiffies()+IdleJiffies(); 
 }
 
 // TODO: Read and return the number of active jiffies for a PID
