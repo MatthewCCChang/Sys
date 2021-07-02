@@ -6,6 +6,7 @@
 
 #include "process.h"
 #include "linux_parser.h"
+using std::stol;
 using std::string;
 using std::to_string;
 using std::vector;
